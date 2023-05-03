@@ -35,14 +35,14 @@ async def process_date(message: types.Message, state: FSMContext):
 
     city_name = get_user_city(user_id=message.from_user.id)
     calendar = get_ics_calendar(AVAILABLE_CITIES[city_name])
-    events = get_events_by_date(calendar=calendar, date=date)  # передайте объект datetime, а не строку
+    events = get_events_by_date(calendar=calendar, date=date)
 
     if not events:
         await message.reply("На выбранную дату событий не найдено.")
     else:
         md_text = text("События на", message.text, "в", escape_md(city_name), ":")
         for event in events:
-            md_text.line(escape_md(event["summary"]))
+            md_text.lines.append(escape_md(event["summary"]))
         await message.reply(md_text, parse_mode=ParseMode.MARKDOWN)
 
     await state.finish()
