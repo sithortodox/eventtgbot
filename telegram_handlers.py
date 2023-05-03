@@ -42,7 +42,7 @@ async def process_date(message: types.Message, state: FSMContext):
     else:
         md_text = text("События на", message.text, "в", escape_md(city_name), ":")
         for event in events:
-            md_text.lines.append(escape_md(event["summary"]))
+            md_text.append(escape_md(event["summary"]))
         await message.reply(md_text, parse_mode=ParseMode.MARKDOWN)
 
     await state.finish()
