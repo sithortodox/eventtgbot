@@ -1,0 +1,7 @@
+aiogram
+aiohttp
+APScheduler
+arrow
+icalendar
+pytz
+SQLAlchemy
