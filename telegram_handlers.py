@@ -5,6 +5,7 @@ from aiogram.types import ParseMode
 from aiogram.utils.markdown import text, escape_md
 from datetime import datetime
 from aiogram.utils.markdown import Text
+from aiogram.types import InputMediaPhoto
 
 from database import get_user_city, set_user_city
 from ics_calendar import get_ics_calendar, get_events_by_date
@@ -24,7 +25,6 @@ async def choose_city(message: types.Message, state: FSMContext):
     await state.set_state('date')
     await message.reply("Выберите дату в формате ГГГГ-ММ-ДД:")
 
-
 async def process_date(message: types.Message, state: FSMContext):
     if await state.get_state() != 'date':
         return
@@ -42,9 +42,15 @@ async def process_date(message: types.Message, state: FSMContext):
     if not events:
         await message.reply("На выбранную дату событий не найдено.")
     else:
-        md_text = Text("События на", message.text, "в", escape_md(city_name), ":")
         for event in events:
-            md_text.add(escape_md(event["summary"]))
-        await message.reply(md_text, parse_mode=ParseMode.MARKDOWN)
+            title = f"*{escape_md(event['summary'])}*"
+            description = escape_md(event["description"])
+            url = event["url"]
+            image_url = event["image_url"]
+
+            caption = f"{title}\n{description}\n[{escape_md('Перейти на сайт события')}]({url})"
+            media = InputMediaPhoto(media=image_url, caption=caption, parse_mode=ParseMode.MARKDOWN)
+
+            await message.reply_photo(photo=image_url, caption=caption, parse_mode=ParseMode.MARKDOWN)
 
     await state.finish()
