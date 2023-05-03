@@ -35,7 +35,7 @@ async def process_date(message: types.Message, state: FSMContext):
 
     city_name = get_user_city(user_id=message.from_user.id)
     calendar = get_ics_calendar(AVAILABLE_CITIES[city_name])
-    events = get_events_by_date(calendar=calendar, date=date)
+    events = get_events_by_date(calendar=calendar, date=date)  # передайте объект datetime, а не строку
 
     if not events:
         await message.reply("На выбранную дату событий не найдено.")
