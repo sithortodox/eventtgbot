@@ -12,7 +12,6 @@ from telegram_handlers import start, choose_city, process_date
 
 from config import API_TOKEN, AVAILABLE_CITIES
 from database import create_tables, close_db
-from telegram_handlers import start, choose_city, process_date
 
 logging.basicConfig(level=logging.INFO)
 
