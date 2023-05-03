@@ -24,6 +24,7 @@ async def choose_city(message: types.Message, state: FSMContext):
     await state.set_state('date')
     await message.reply("Выберите дату в формате ГГГГ-ММ-ДД:")
 
+
 async def process_date(message: types.Message, state: FSMContext):
     if await state.get_state() != 'date':
         return
@@ -43,7 +44,7 @@ async def process_date(message: types.Message, state: FSMContext):
     else:
         md_text = Text("События на", message.text, "в", escape_md(city_name), ":")
         for event in events:
-            md_text.line(escape_md(event["summary"]))
+            md_text.add(escape_md(event["summary"]))
         await message.reply(md_text, parse_mode=ParseMode.MARKDOWN)
 
     await state.finish()
